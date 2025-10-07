@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -19,6 +20,7 @@ public class Main {
           3 - Búsqueda por nombre
           4 - Editar nombre producto
           5 - Borrar producto
+          6 - nueva funcion
           """);
       opcionUsuario = entrada.nextInt();
 
@@ -26,6 +28,9 @@ public class Main {
         case 1 -> crearProducto(productosDB); // - >
         case 2 -> listarProductos(productosDB);
         case 3 -> buscarProductoPorNombre(productosDB);
+        case 4 -> editarProducto(productosDB);
+        case 5 -> borrarProducto(productosDB);
+        case 6 -> System.out.println("Funcionalida en progreso...");
         case 0 -> {
           System.out.println("Gracias por usar la app!");
           break label; // corta el bucle donde se ejecuta
@@ -80,7 +85,55 @@ public class Main {
     listarProductos(productoEncontrados);
   }
 
+  public static void editarProducto(List<String> productos) {
+    Scanner entrada = new Scanner(System.in);
+    int indiceProducto = obtenerIdProducto(productos);
+    // TODO: validar que encontramos el indice
+    String nombreOriginal = productos.get(indiceProducto);
+    System.out.println("Producto a editar:");
+    System.out.println(nombreOriginal);
+    // TODO: validar que el usuario quiere editar el producto que se encontro
+    System.out.print("Ingrese el nuevo nombre: ");
+    String nuevoNombre = entrada.nextLine();
+
+    // ["p1", "p2", "p3"]
+    // set(1, "p38")
+    // ["p1", "p38", "p3"]
+    productos.set(indiceProducto, nuevoNombre);
+
+    System.out.printf("El nombre del producto cambio de %s a %s", nombreOriginal, nuevoNombre);
+  }
+
+  public static void borrarProducto(List<String> productos) {
+    Scanner entrada = new Scanner(System.in);
+    int indiceProducto = obtenerIdProducto(productos);
+    // TODO: validar que encontramos el indice
+    String nombreOriginal = productos.get(indiceProducto);
+    System.out.println("Producto a eliminar:");
+    System.out.println(nombreOriginal);
+    // TODO: validar que el usuario quiere borrar el producto que se encontro
+
+    productos.remove(indiceProducto);
+
+    System.out.printf("El producto %s se borro", nombreOriginal);
+  }
+
   /* UTILIDADES */
+  /* Busqueda por id - ahora mismo solo funciona con el indice, en el futuro se va a cambiar */
+  public static int obtenerIdProducto(List<String> productos) {
+    Scanner entrada = new Scanner(System.in);
+    int idProducto = -1; // el -1 representa que no encontramos el producto
+    String busqueda = entrada.nextLine();
+
+    for (String producto : productos) {
+      if (estaIncluido(producto, busqueda)) {
+        return productos.indexOf(producto);
+      }
+    }
+
+    return idProducto;
+  }
+
   public static boolean estaIncluido(String nombreCompleto, String nombreParcial) {
     String nombreCompletoFormateado = formatoBusqueda(nombreCompleto);
 

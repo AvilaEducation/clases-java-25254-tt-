@@ -6,7 +6,8 @@ public class Main {
 
   public static void main(String[] args) {
     Scanner entrada = new Scanner(System.in);
-    ArrayList<String> productosDB = obtenerProductosTecnologicos();
+    ArrayList<Producto> productosDB = obtenerProductosTecnologicos();
+    int idSiguiente = productosDB.size() + 1;
     int opcionUsuario;
 
     System.out.println("Te damos la bienvenida a la app de compras 🛒");
@@ -25,7 +26,10 @@ public class Main {
       opcionUsuario = entrada.nextInt();
 
       switch (opcionUsuario) {
-        case 1 -> crearProducto(productosDB); // - >
+        case 1 -> {
+          crearProducto(idSiguiente, productosDB);
+          idSiguiente += 1;
+        }
         case 2 -> listarProductos(productosDB);
         case 3 -> buscarProductoPorNombre(productosDB);
         case 4 -> editarProducto(productosDB);
@@ -40,19 +44,20 @@ public class Main {
     }
   }
 
-  public static void crearProducto(ArrayList<String> productos) {
+  public static void crearProducto(int id, ArrayList<Producto> productos) {
     Scanner entrada = new Scanner(System.in);
     System.out.println("Creando Nuevo Producto");
     System.out.print("Ingrese el nombre del nuevo producto: ");
     String nombre = entrada.nextLine();
 
-    productos.add(nombre);
+    // TODO: cambiarlo cuando veamos static
+    productos.add(new Producto(id, nombre));
 
     // TODO: agregar un mensaje de confirmación cuando se crea el producto
     pausa();
   }
 
-  public static void listarProductos(ArrayList<String> productos) {
+  public static void listarProductos(ArrayList<Producto> productos) {
     System.out.println("=======================================");
     System.out.println("        LISTA DE PRODUCTOS");
     System.out.println("=======================================");
@@ -60,9 +65,8 @@ public class Main {
     if (productos == null || productos.isEmpty()) {
       System.out.println("⚠️  No hay productos para mostrar.");
     } else {
-      int contador = 1;
-      for (String producto : productos) {
-        System.out.printf(" %2d. %s%n", contador++, producto);
+      for (Producto producto : productos) {
+        System.out.printf(" %2d. %s%n", producto.id, producto.nombre);
       }
     }
 
@@ -70,14 +74,14 @@ public class Main {
     pausa();
   }
 
-  public static void buscarProductoPorNombre(ArrayList<String> productos) {
+  public static void buscarProductoPorNombre(ArrayList<Producto> productos) {
     Scanner entrada = new Scanner(System.in);
     System.out.println("Ingrese un nombre de un producto: ");
     String busqueda = entrada.nextLine();
-    ArrayList<String> productoEncontrados = new ArrayList<>();
+    ArrayList<Producto> productoEncontrados = new ArrayList<>();
 
-    for (String producto : productos) {
-      if (estaIncluido(producto, busqueda)) {
+    for (Producto producto : productos) {
+      if (estaIncluido(producto.nombre, busqueda)) {
         productoEncontrados.add(producto);
       }
     }
@@ -85,11 +89,14 @@ public class Main {
     listarProductos(productoEncontrados);
   }
 
-  public static void editarProducto(List<String> productos) {
+  public static void editarProducto(List<Producto> productos) {
+    // el listado de productos tiene las direcciones de memoria de los productos originales
     Scanner entrada = new Scanner(System.in);
-    int indiceProducto = obtenerIdProducto(productos);
-    // TODO: validar que encontramos el indice
-    String nombreOriginal = productos.get(indiceProducto);
+    // aca obtenemos la direccion de memoria que nos permite modificar el objeto original
+    // que es uno de los que esta en el listado
+    Producto producto = obtenerProductoPorId(productos);
+    // TODO: validar que encontramos el producto
+    String nombreOriginal = producto.nombre;
     System.out.println("Producto a editar:");
     System.out.println(nombreOriginal);
     // TODO: validar que el usuario quiere editar el producto que se encontro
@@ -99,39 +106,41 @@ public class Main {
     // ["p1", "p2", "p3"]
     // set(1, "p38")
     // ["p1", "p38", "p3"]
-    productos.set(indiceProducto, nuevoNombre);
+    // actualizamos el nombre en el producto
+    producto.nombre = nuevoNombre;
 
     System.out.printf("El nombre del producto cambio de %s a %s", nombreOriginal, nuevoNombre);
   }
 
-  public static void borrarProducto(List<String> productos) {
+  public static void borrarProducto(List<Producto> productos) {
     Scanner entrada = new Scanner(System.in);
-    int indiceProducto = obtenerIdProducto(productos);
-    // TODO: validar que encontramos el indice
-    String nombreOriginal = productos.get(indiceProducto);
-    System.out.println("Producto a eliminar:");
+    Producto producto = obtenerProductoPorId(productos);
+    // TODO: validar que encontramos el producto
+    String nombreOriginal = producto.nombre;
+    System.out.println("Producto a borrar:");
     System.out.println(nombreOriginal);
     // TODO: validar que el usuario quiere borrar el producto que se encontro
 
-    productos.remove(indiceProducto);
-
-    System.out.printf("El producto %s se borro", nombreOriginal);
+    // aca borramos el producto
+    productos.remove(producto);
+    System.out.println("Borrado exitosamente!");
   }
 
   /* UTILIDADES */
   /* Busqueda por id - ahora mismo solo funciona con el indice, en el futuro se va a cambiar */
-  public static int obtenerIdProducto(List<String> productos) {
+  public static Producto obtenerProductoPorId(List<Producto> productos) {
     Scanner entrada = new Scanner(System.in);
-    int idProducto = -1; // el -1 representa que no encontramos el producto
-    String busqueda = entrada.nextLine();
+    // TODO: validacion de datos
+    System.out.println("Ingrese el id del producto: ");
+    int idBusqueda = entrada.nextInt();
 
-    for (String producto : productos) {
-      if (estaIncluido(producto, busqueda)) {
-        return productos.indexOf(producto);
+    for (Producto producto : productos) {
+      if (producto.id == idBusqueda) {
+        return producto;
       }
     }
 
-    return idProducto;
+    return null; // el null representa que no encontramos el producto
   }
 
   public static boolean estaIncluido(String nombreCompleto, String nombreParcial) {
@@ -154,19 +163,19 @@ public class Main {
     // TODO: limpiar la pantalla de la consola
   }
 
-  public static ArrayList<String> obtenerProductosTecnologicos() {
-    ArrayList<String> productos = new ArrayList<>();
+  public static ArrayList<Producto> obtenerProductosTecnologicos() {
+    ArrayList<Producto> productos = new ArrayList<>();
 
-    productos.add("Laptop Lenovo ThinkPad X1 Carbon");
-    productos.add("Mouse inalámbrico Logitech MX Master 3");
-    productos.add("Teclado mecánico Razer BlackWidow V4");
-    productos.add("Monitor LG UltraWide 34 pulgadas");
-    productos.add("Smartphone Samsung Galaxy S23 Ultra");
-    productos.add("Tablet Apple iPad Pro 12.9\"");
-    productos.add("Disco duro externo Seagate 2TB");
-    productos.add("Memoria RAM Corsair Vengeance 16GB");
-    productos.add("Cargador inalámbrico Belkin Boost Up");
-    productos.add("Auriculares Bluetooth Sony WH-1000XM5");
+    productos.add(new Producto(1, "Laptop Lenovo ThinkPad X1 Carbon"));
+    productos.add(new Producto(2, "Mouse inalámbrico Logitech MX Master 3"));
+    productos.add(new Producto(3, "Teclado mecánico Razer BlackWidow V4"));
+    productos.add(new Producto(4, "Monitor LG UltraWide 34 pulgadas"));
+    productos.add(new Producto(5, "Smartphone Samsung Galaxy S23 Ultra"));
+    productos.add(new Producto(6, "Tablet Apple iPad Pro 12.9\""));
+    productos.add(new Producto(7, "Disco duro externo Seagate 2TB"));
+    productos.add(new Producto(8, "Memoria RAM Corsair Vengeance 16GB"));
+    productos.add(new Producto(9, "Cargador inalámbrico Belkin Boost Up"));
+    productos.add(new Producto(10, "Auriculares Bluetooth Sony WH-1000XM5"));
 
     return productos;
   }

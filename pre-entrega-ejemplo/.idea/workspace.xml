@@ -17,9 +17,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="33OLKLwe7Zy7NG7yI5t4IONoifC" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />

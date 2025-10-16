@@ -8,4 +8,8 @@ public class Producto {
     id = idProducto;
     nombre = nombreProducto;
   }
+
+  public boolean coincideId(int id) {
+    return this.id == id;
+  }
 }

@@ -135,7 +135,7 @@ public class Main {
     int idBusqueda = entrada.nextInt();
 
     for (Producto producto : productos) {
-      if (producto.id == idBusqueda) {
+      if (producto.coincideId(idBusqueda)) {
         return producto;
       }
     }

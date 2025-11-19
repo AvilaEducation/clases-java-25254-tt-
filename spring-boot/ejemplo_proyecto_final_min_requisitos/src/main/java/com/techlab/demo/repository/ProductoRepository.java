@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto, Long> {
 
+  // TODO: query methods: https://docs.spring.io/spring-data/jpa/reference/jpa/query-methods.html
   List<Producto> searchByNombre(String nombre);
 
   List<Producto> findByNombreContaining(String nombre);

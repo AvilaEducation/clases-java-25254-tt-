@@ -40,6 +40,7 @@ public class ProductService {
   }
 
   public Producto editarNombreProducto(Long id, Producto dataProducto) {
+    // TODO: https://www.baeldung.com/java-optional-return
     Producto producto = this.productoRepository.findById(id)
         .orElseThrow(() -> new RuntimeException("no encontramos el producto"));
 

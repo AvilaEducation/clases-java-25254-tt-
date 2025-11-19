@@ -9,13 +9,13 @@ spring:
   sql:
     init:
       mode: always
-      data-locations: classpath:productos.sql
+      data-locations: classpath:productos.sql # script de carga de datos
   h2:
     console:
       enabled: true           # Habilita la consola web de H2
       path: /h2-console      # Ruta para acceder a la consola (http://localhost:8080/h2-console)
   jpa:
-    defer-datasource-initialization: true
+    defer-datasource-initialization: true # config para que primero se creen las tablas y luego carguen los scripts
     database-platform: org.hibernate.dialect.H2Dialect
     hibernate:
       ddl-auto: create  # create, create-drop, validate, update

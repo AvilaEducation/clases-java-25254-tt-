@@ -28,3 +28,5 @@ INSERT INTO producto (nombre, precio) VALUES ('Cámara de Seguridad WiFi', 28000
 INSERT INTO producto (nombre, precio) VALUES ('Scanner Epson V19', 80000.00);
 INSERT INTO producto (nombre, precio) VALUES ('Joystick Logitech F310', 23000.00);
 INSERT INTO producto (nombre, precio) VALUES ('Microfono Condensador USB', 35000.00);
+
+INSERT INTO producto (nombre, precio) VALUES ('Cargador USB-A 45W', 1000.00);

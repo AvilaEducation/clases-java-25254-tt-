@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: demo-app
+  profiles:
+    active: prod
+server:
+  port: ${PUERTO_LOCAL}

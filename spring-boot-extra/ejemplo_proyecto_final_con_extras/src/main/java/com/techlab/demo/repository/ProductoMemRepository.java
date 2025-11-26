@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-@Repository("ProductoMemRepository")
+@Repository
+@Profile("dev")
 public class ProductoMemRepository implements ProductRepository {
 
   private static Long nextId = 1L;

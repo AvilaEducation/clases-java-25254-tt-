@@ -4,7 +4,6 @@ import com.techlab.demo.model.Producto;
 import com.techlab.demo.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 // beans
@@ -14,7 +13,7 @@ public class ProductServiceJPA implements ProductService {
   //private ProductoMemRepository repository;
   private ProductRepository productoRepository;
 
-  public ProductServiceJPA(@Qualifier("${repository.active}") ProductRepository repository) {
+  public ProductServiceJPA(ProductRepository repository) {
     this.productoRepository = repository;
   }
 

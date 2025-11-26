@@ -3,9 +3,11 @@ package com.techlab.demo.repository;
 import com.techlab.demo.model.Producto;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Repository;
 
-@Repository("ProductoDBRespository")
+@Repository
+@Profile("local")
 public class ProductoDBRespository implements ProductRepository {
 
   private ProductoRepositoryJPA productoRepositoryJPA;

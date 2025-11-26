@@ -1,3 +1,6 @@
+repository:
+  active: ProductoMemRepository
+
 spring:
   persistencia: memoria
   application:

@@ -4,6 +4,7 @@ import com.techlab.demo.model.Producto;
 import com.techlab.demo.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 // beans
@@ -13,7 +14,7 @@ public class ProductServiceJPA implements ProductService {
   //private ProductoMemRepository repository;
   private ProductRepository productoRepository;
 
-  public ProductServiceJPA(ProductRepository repository) {
+  public ProductServiceJPA(@Qualifier("${repository.active}") ProductRepository repository) {
     this.productoRepository = repository;
   }
 
@@ -25,23 +26,23 @@ public class ProductServiceJPA implements ProductService {
 
   public List<Producto> listarProductos(String nombre, Double precio) {
     if (!nombre.isEmpty() && precio > 0) {
-      return this.productoRepository.findByNombreContainingAndPrecioLessThanEqual(nombre, precio);
+      return this.productoRepository.obtenerProductosPorNombreYPrecio(nombre, precio);
     }
 
     if (!nombre.isEmpty()) {
-      return this.productoRepository.findByNombreContaining(nombre);
+      return this.productoRepository.obtenerProductosPorNombre(nombre);
     }
 
     if (precio > 0) {
-      return this.productoRepository.findByPrecioLessThanEqual(precio);
+      return this.productoRepository.obtenerProductosPorPrecio(precio);
     }
 
-    return this.productoRepository.findAll();
+    return this.productoRepository.obtenerProductos();
   }
 
   public Producto editarNombreProducto(Long id, Producto dataProducto) {
     // TODO: https://www.baeldung.com/java-optional-return
-    Producto producto = this.productoRepository.findById(id)
+    Producto producto = this.productoRepository.buscarProductoPorId(id)
         .orElseThrow(() -> new RuntimeException("no encontramos el producto"));
 
     // VALIDACIONES
@@ -51,13 +52,13 @@ public class ProductServiceJPA implements ProductService {
     }
 
     producto.setNombre(dataProducto.getNombre());
-    this.productoRepository.save(producto);
+    this.productoRepository.guardarProducto(producto);
 
     return producto;
   }
 
   public Producto borrarProducto(Long id) {
-    Optional<Producto> productOptional = this.productoRepository.findById(id);
+    Optional<Producto> productOptional = this.productoRepository.buscarProductoPorId(id);
     if (productOptional.isEmpty()) {
       System.out.println("No se puede borrar el producto. porque no se encontro");
       return null;

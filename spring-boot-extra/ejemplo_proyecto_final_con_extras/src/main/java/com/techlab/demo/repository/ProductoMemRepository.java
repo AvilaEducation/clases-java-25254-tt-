@@ -2,9 +2,12 @@ package com.techlab.demo.repository;
 
 import com.techlab.demo.model.Producto;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import org.springframework.stereotype.Repository;
 
-@Repository
+@Repository("ProductoMemRepository")
 public class ProductoMemRepository implements ProductRepository {
 
   private static Long nextId = 1L;
@@ -24,7 +27,7 @@ public class ProductoMemRepository implements ProductRepository {
     return this.productos;
   }
 
-  public ArrayList<Producto> obtenerProductosPorNombreYPrecio(String nombre, int precioTope) {
+  public List<Producto> obtenerProductosPorNombreYPrecio(String nombre, Double precioTope) {
     ArrayList<Producto> productoEncontrados = new ArrayList<>();
     for (Producto producto : this.productos) {
       if (estaIncluido(producto.getNombre(), nombre) && producto.getPrecio() <= precioTope) {
@@ -47,7 +50,7 @@ public class ProductoMemRepository implements ProductRepository {
     return productoEncontrados;
   }
 
-  public ArrayList<Producto> obtenerProductosPorPrecio(int precioTope) {
+  public ArrayList<Producto> obtenerProductosPorPrecio(Double precioTope) {
     ArrayList<Producto> productosFiltrados = new ArrayList<>();
 
     for (Producto producto : productos) {
@@ -59,14 +62,14 @@ public class ProductoMemRepository implements ProductRepository {
     return productosFiltrados;
   }
 
-  public Producto buscarProductoPorId(int id) {
+  public Optional<Producto> buscarProductoPorId(Long id) {
     for (Producto producto : productos) {
-      if (producto.getId() == id) {
-        return producto;
+      if (Objects.equals(producto.getId(), id)) {
+        return Optional.of(producto);
       }
     }
 
-    return null;
+    return Optional.empty();
   }
 
   public void borrarProducto(Producto producto) {

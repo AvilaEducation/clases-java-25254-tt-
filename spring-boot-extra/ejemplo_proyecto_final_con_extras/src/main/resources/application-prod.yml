@@ -1,3 +1,5 @@
+repository:
+  active: ProductoDBRespository
 spring:
   persistencia: db
   application:

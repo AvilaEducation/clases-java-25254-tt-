@@ -1,22 +1,29 @@
 package com.techlab.speedrun.service;
 
+import static com.techlab.speedrun.utils.StringUtils.validation;
+
 import com.techlab.speedrun.entity.Product;
 import com.techlab.speedrun.repository.ProductRepository;
+import com.techlab.speedrun.utils.StringUtils;
 import java.util.List;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class ProductService {
 
   private final ProductRepository productRepository;
+  private final StringUtils stringUtils;
 
-  public ProductService(ProductRepository productRepository) {
+  public ProductService(ProductRepository productRepository, StringUtils stringUtils) {
     this.productRepository = productRepository;
+    this.stringUtils = stringUtils;
   }
 
   public Product createProduct(Product product){
-    System.out.println("Producto ingresado: " + product);
+    log.info("Producto ingresado: {}", product);
 
     // productSavedWithId
     return this.productRepository.save(product);
@@ -46,5 +53,27 @@ public class ProductService {
     }
 
     return this.productRepository.findAll();
+  }
+
+  public Product editProductById(Long id, Product dataToEdit){
+    Product product = this.getProductById(id);
+
+    if (!stringUtils.isEmpty(dataToEdit.getName())){
+      System.out.printf("Editando el nombre del producto: viejo:%s - nuevo:%s", product.getName(), dataToEdit.getName());
+
+      product.setName(dataToEdit.getName());
+    }
+
+    return this.productRepository.save(product);
+  }
+
+  public Product deleteProductById(Long id){
+    Product product = this.getProductById(id);
+
+    //this.productRepository.delete(product);
+    product.setDeleted(true);
+    this.productRepository.save(product);
+
+    return product;
   }
 }

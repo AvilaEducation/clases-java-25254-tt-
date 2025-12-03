@@ -4,6 +4,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import java.time.LocalDate;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -23,4 +24,7 @@ public class Product {
   private Double price;
   private String category;
   private Integer stock;
+
+  private Boolean deleted;
+  private LocalDate deletedDate;
 }

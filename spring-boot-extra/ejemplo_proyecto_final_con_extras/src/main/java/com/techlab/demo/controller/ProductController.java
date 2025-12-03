@@ -3,6 +3,8 @@ package com.techlab.demo.controller;
 import com.techlab.demo.model.Producto;
 import com.techlab.demo.service.ProductService;
 import java.util.List;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,8 +25,8 @@ public class ProductController {
   }
 
   @PostMapping("/products")
-  public Producto crearProducto(@RequestBody Producto producto) {
-    return this.service.crearProducto(producto);
+  public ResponseEntity<Producto> crearProducto(@RequestBody Producto producto) {
+    return ResponseEntity.status(HttpStatus.CREATED).body(this.service.crearProducto(producto));
   }
 
   // GET /products?nombre="product"&precio=123

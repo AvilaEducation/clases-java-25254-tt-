@@ -1,6 +1,9 @@
 package com.techlab.demo.service;
 
-import com.techlab.demo.model.Producto;
+import com.techlab.demo.exception.NotFoundException;
+import com.techlab.demo.exception.TechlabCheckedException;
+import com.techlab.demo.exception.ValidationException;
+import com.techlab.demo.model.entity.Producto;
 import com.techlab.demo.repository.ProductRepository;
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +22,8 @@ public class ProductServiceJPA implements ProductService {
 
   public Producto crearProducto(Producto producto) {
     System.out.println("Creando Nuevo Producto");
+
+    Integer error = 0 / 0;
 
     return this.productoRepository.guardarProducto(producto);
   }
@@ -42,12 +47,13 @@ public class ProductServiceJPA implements ProductService {
   public Producto editarNombreProducto(Long id, Producto dataProducto) {
     // TODO: https://www.baeldung.com/java-optional-return
     Producto producto = this.productoRepository.buscarProductoPorId(id)
-        .orElseThrow(() -> new RuntimeException("no encontramos el producto"));
+        .orElseThrow(() -> new NotFoundException("no encontramos el producto"));
 
     // VALIDACIONES
     if (dataProducto.getNombre() == null || dataProducto.getNombre().isBlank()) {
       System.out.println("No se puede editar el producto. porque el nombre no es valido");
-      return null;
+      throw new ValidationException(
+          "No se puede editar el producto. porque el nombre no es valido");
     }
 
     producto.setNombre(dataProducto.getNombre());
@@ -56,11 +62,11 @@ public class ProductServiceJPA implements ProductService {
     return producto;
   }
 
-  public Producto borrarProducto(Long id) {
+  public Producto borrarProducto(Long id) throws TechlabCheckedException {
     Optional<Producto> productOptional = this.productoRepository.buscarProductoPorId(id);
     if (productOptional.isEmpty()) {
       System.out.println("No se puede borrar el producto. porque no se encontro");
-      return null;
+      throw new TechlabCheckedException("No se puede borrar el producto. porque no se encontro");
     }
 
     Producto producto = productOptional.get();

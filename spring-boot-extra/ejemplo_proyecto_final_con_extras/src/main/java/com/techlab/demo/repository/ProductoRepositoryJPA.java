@@ -1,6 +1,6 @@
 package com.techlab.demo.repository;
 
-import com.techlab.demo.model.Producto;
+import com.techlab.demo.model.entity.Producto;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

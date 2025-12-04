@@ -1,6 +1,6 @@
 package com.techlab.demo.repository;
 
-import com.techlab.demo.model.Producto;
+import com.techlab.demo.model.entity.Producto;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.context.annotation.Profile;

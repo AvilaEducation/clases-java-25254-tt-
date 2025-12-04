@@ -1,4 +1,4 @@
-package com.techlab.demo.model;
+package com.techlab.demo.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

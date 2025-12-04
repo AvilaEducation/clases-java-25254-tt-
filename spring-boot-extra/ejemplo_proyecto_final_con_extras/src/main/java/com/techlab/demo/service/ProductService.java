@@ -1,6 +1,7 @@
 package com.techlab.demo.service;
 
-import com.techlab.demo.model.Producto;
+import com.techlab.demo.exception.TechlabCheckedException;
+import com.techlab.demo.model.entity.Producto;
 import java.util.List;
 
 public interface ProductService {
@@ -11,5 +12,5 @@ public interface ProductService {
 
   Producto editarNombreProducto(Long id, Producto dataProducto);
 
-  Producto borrarProducto(Long id);
+  Producto borrarProducto(Long id) throws TechlabCheckedException;
 }

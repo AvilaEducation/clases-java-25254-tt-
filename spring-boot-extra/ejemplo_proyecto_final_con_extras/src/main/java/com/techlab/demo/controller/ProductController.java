@@ -1,6 +1,7 @@
 package com.techlab.demo.controller;
 
-import com.techlab.demo.model.Producto;
+import com.techlab.demo.exception.TechlabCheckedException;
+import com.techlab.demo.model.entity.Producto;
 import com.techlab.demo.service.ProductService;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -44,8 +45,12 @@ public class ProductController {
   }
 
   @DeleteMapping("/products/{id}")
-  public Producto borrarProducto(@PathVariable(name = "id") Long productId) {
-    return this.service.borrarProducto(productId);
+  public ResponseEntity<Producto> borrarProducto(@PathVariable(name = "id") Long productId) {
+    try {
+      return ResponseEntity.status(HttpStatus.OK).body(this.service.borrarProducto(productId));
+    } catch (TechlabCheckedException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
   }
 
 }

@@ -28,6 +28,7 @@ public class ProductServiceJPA implements ProductService {
     return this.productoRepository.guardarProducto(producto);
   }
 
+  //@Transactional
   public List<Producto> listarProductos(String nombre, Double precio) {
     if (!nombre.isEmpty() && precio > 0) {
       return this.productoRepository.obtenerProductosPorNombreYPrecio(nombre, precio);
